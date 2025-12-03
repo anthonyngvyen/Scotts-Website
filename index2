@@ -1,0 +1,44 @@
+<!--
+Replace the existing email input + button in your index.html with the form block below.
+Do NOT replace the whole file unless you want to — only find the part that currently
+contains <input type="email"> and the <button> and swap that piece with the code below.
+
+Then add the small <script> (also included below) right before the closing </body> tag.
+-->
+<form name="subscribe" method="POST" data-netlify="true" action="/thankyou.html" netlify-honeypot="bot-field">
+  <!-- Required hidden field so Netlify recognizes the form -->
+  <input type="hidden" name="form-name" value="subscribe" />
+
+  <!-- Honeypot field to reduce spam (leave hidden) -->
+  <p style="display:none">
+    <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+  </p>
+
+  <!-- Replace your current email input with this (keeps styling via your existing CSS) -->
+  <input type="email" name="email" placeholder="Enter your email" required />
+
+  <!-- Replace your current submit button with this -->
+  <button type="submit">Notify me</button>
+</form>
+
+<!-- Client-side validation script: place just before </body> in index.html -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form[name="subscribe"]');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    const input = form.querySelector('input[name="email"]');
+    const email = input && input.value ? input.value.trim() : '';
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(email)) {
+      e.preventDefault();
+      // Simple inline feedback — match your site's style if you'd like
+      alert('Please enter a valid email address.');
+      input.focus();
+      return false;
+    }
+    // Let the browser submit the form normally. Netlify will accept and then
+    // redirect the browser to /thankyou.html (action target) after successful POST.
+  });
+});
+</script>
