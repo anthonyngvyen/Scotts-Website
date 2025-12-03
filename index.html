@@ -74,5 +74,24 @@
   <input type="hidden" name="form-name" value="subscribe" />
     </div>
   </div>
+  <!-- Paste this just BEFORE the closing </body> tag in index.html -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form[name="subscribe"]');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    const input = form.querySelector('input[name="email"]');
+    const email = input && input.value ? input.value.trim() : '';
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(email)) {
+      e.preventDefault();
+      alert('Please enter a valid email address.');
+      input.focus();
+      return false;
+    }
+    // allow normal submit; Netlify will capture and browser will be redirected
+  });
+});
+</script>
 </body>
 </html>
